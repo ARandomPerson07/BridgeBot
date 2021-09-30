@@ -112,7 +112,7 @@ def NT1():
     while not declarer:
         for i,hcp in enumerate(hcp_list):
             if 15<=hcp_list[i]<=17:
-                if dist_list[i] in balanced:
+                if sorted(dist_list[i]) in balanced:
                     declarer = [hands_dealt[i],hcp_list[i],dist_list[i]]
                     n = (i+2)%4
                     partner = [hands_dealt[n],hcp_list[n],dist_list[n]]
@@ -121,7 +121,23 @@ def NT1():
             hands_dealt,hcp_list,dist_list = deal()
                               
     return declarer,partner
-    
+
+def M1():
+    hands_dealt,hcp_list,dist_list = deal()
+    #enum here is used to artificially map to the players
+    declarer = False
+    while not declarer:
+        for i,hcp in enumerate(hcp_list):
+            if 12<=hcp_list[i]<=21:
+                if dist_list[i][0] >= 5 or dist_list[i][1]>=5:
+                    declarer = [hands_dealt[i],hcp_list[i],dist_list[i]]
+                    n = (i+2)%4
+                    partner = [hands_dealt[n],hcp_list[n],dist_list[n]]
+                    print(declarer[1])
+                    break
+            hands_dealt,hcp_list,dist_list = deal()
+                              
+    return declarer,partner   
         
 def dh(hand): #display hand
     flat_h = []
@@ -170,11 +186,21 @@ async def on_ready():
 
 @bot.command(name = "deal", aliases = ['d'])
 async def dealcom(ctx, opener = "1NT"):
+  print('deal command detected')
   if opener =="1NT":
+    print("Generating 1NT hand")
     d,p = NT1()
     dec = dh(d[0])
     part = dh(p[0])
     message=f"\nDeclarer Hand:\n||{dec}||\n\nPartner Hand:\n||{part}||"
     await ctx.send(message)
+  elif opener == "1M":
+    print("Generating 1M hand")
+    d,p = M1()
+    dec = dh(d[0])
+    part = dh(p[0])
+    message=f"\nDeclarer Hand:\n||{dec}||\n\nPartner Hand:\n||{part}||"
+    await ctx.send(message)
+
 keep_alive()
 bot.run(os.environ['token'])
