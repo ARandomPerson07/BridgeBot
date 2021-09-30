@@ -82,10 +82,6 @@ def deal(display = False):
     dist2 = [len(p2[0]),len(p2[1]),len(p2[2]),len(p2[3])]
     dist3 = [len(p3[0]),len(p3[1]),len(p3[2]),len(p3[3])]
     dist4 = [len(p4[0]),len(p4[1]),len(p4[2]),len(p4[3])]
-    dist1.sort(reverse = True)
-    dist2.sort(reverse = True)
-    dist3.sort(reverse = True)
-    dist4.sort(reverse = True)
     dist_list = [dist1,dist2,dist3,dist4]
     
     hcp1 = get_hcp(hp1)
@@ -112,7 +108,7 @@ def NT1():
     while not declarer:
         for i,hcp in enumerate(hcp_list):
             if 15<=hcp_list[i]<=17:
-                if sorted(dist_list[i]) in balanced:
+                if sorted(dist_list[i], reverse = True) in balanced:
                     declarer = [hands_dealt[i],hcp_list[i],dist_list[i]]
                     n = (i+2)%4
                     partner = [hands_dealt[n],hcp_list[n],dist_list[n]]
@@ -130,6 +126,7 @@ def M1():
         for i,hcp in enumerate(hcp_list):
             if 12<=hcp_list[i]<=21:
                 if dist_list[i][0] >= 5 or dist_list[i][1]>=5:
+                    print(dist_list)
                     declarer = [hands_dealt[i],hcp_list[i],dist_list[i]]
                     n = (i+2)%4
                     partner = [hands_dealt[n],hcp_list[n],dist_list[n]]
