@@ -39,7 +39,9 @@ class card():
 def hand_read(p):
     hand = []
     for item in p:
-        hand.append([card(item).suit,card(item).val,card(item).numval])
+        temp_card = card(item)
+        hand.append([temp_card.suit,temp_card.val,
+        temp_card.numval])
     return hand
 
 #sort the hand after returning a hand "object"
@@ -101,6 +103,24 @@ def deal(display = False):
 
 balanced = [[4,3,3,3],[5,3,3,2],[4,4,3,2]]
 
+def m1():
+    hands_dealt,hcp_list,dist_list = deal()
+    #enum here is used to artificially map to the players
+    declarer = False
+    while not declarer:
+        for i,hcp in enumerate(hcp_list):
+            if 12<=hcp_list[i]<=21:
+                if dist_list[i][0] < 5 and dist_list[i][1]<5:
+                    print(dist_list)
+                    declarer = [hands_dealt[i],hcp_list[i],dist_list[i]]
+                    n = (i+2)%4
+                    partner = [hands_dealt[n],hcp_list[n],dist_list[n]]
+                    print(declarer[1])
+                    break
+            hands_dealt,hcp_list,dist_list = deal()
+                              
+    return declarer,partner
+
 def NT1():
     hands_dealt,hcp_list,dist_list = deal()
     #enum here is used to artificially map to the players
@@ -134,7 +154,137 @@ def M1():
                     break
             hands_dealt,hcp_list,dist_list = deal()
                               
-    return declarer,partner   
+    return declarer,partner
+
+###DUE TO THE LINEAR NATURE OF THE SYSTEM, IT IS VERY SLIGHTLY MORE LIKELY TO GENERATE SPADE FIT HANDS
+
+def M1ns(): #one major, no support
+    hands_dealt,hcp_list,dist_list = deal()
+    #enum here is used to artificially map to the players
+    declarer = False
+    while not declarer:
+        for i,hcp in enumerate(hcp_list):
+            if 12<=hcp_list[i]<=21:
+                if dist_list[i][0] >= 5 or dist_list[i][1]>=5:
+                    s_long = (dist_list[i][0]>=5)
+                    h_long = (dist_list[i][1]>=5)
+                    ##check for spade fit
+                    for player,dist in enumerate(dist_list):
+                      if player !=i and s_long:
+                        if dist_list[player][0]<=2:
+                          declarer = [hands_dealt[i],hcp_list[i],dist_list[i]]
+                          partner = [hands_dealt[player],hcp_list[player],dist_list[player]]
+                          print(declarer[1])
+                          break
+                    ##check for heart fit
+                    print(dist_list)
+                    for player,dist in enumerate(dist_list):
+                      if player !=i and h_long:
+                        if dist_list[player][1]<=2:
+                          declarer = [hands_dealt[i],hcp_list[i],dist_list[i]]
+                          partner = [hands_dealt[player],hcp_list[player],dist_list[player]]
+                          print(declarer[1])
+                          break
+
+            hands_dealt,hcp_list,dist_list = deal()
+                              
+    return declarer,partner
+
+def M1ts(): #one major, three support
+    hands_dealt,hcp_list,dist_list = deal()
+    #enum here is used to artificially map to the players
+    declarer = False
+    while not declarer:
+        for i,hcp in enumerate(hcp_list):
+            if 12<=hcp_list[i]<=21:
+                if dist_list[i][0] >= 5 or dist_list[i][1]>=5:
+                    s_long = (dist_list[i][0]>=5)
+                    h_long = (dist_list[i][1]>=5)
+                    ##check for spade fit
+                    for player,dist in enumerate(dist_list):
+                      if player !=i and s_long:
+                        if dist_list[player][0]==3:
+                          declarer = [hands_dealt[i],hcp_list[i],dist_list[i]]
+                          partner = [hands_dealt[player],hcp_list[player],dist_list[player]]
+                          print(declarer[1])
+                          break
+                    ##check for heart fit
+                    print(dist_list)
+                    for player,dist in enumerate(dist_list):
+                      if player !=i and h_long:
+                        if dist_list[player][1]==3:
+                          declarer = [hands_dealt[i],hcp_list[i],dist_list[i]]
+                          partner = [hands_dealt[player],hcp_list[player],dist_list[player]]
+                          print(declarer[1])
+                          break
+
+            hands_dealt,hcp_list,dist_list = deal()
+                              
+    return declarer,partner    
+
+def M1fs(): #one major, four support
+    hands_dealt,hcp_list,dist_list = deal()
+    #enum here is used to artificially map to the players
+    declarer = False
+    while not declarer:
+        for i,hcp in enumerate(hcp_list):
+            if 12<=hcp_list[i]<=21:
+                if dist_list[i][0] >= 5 or dist_list[i][1]>=5:
+                    s_long = (dist_list[i][0]>=5)
+                    h_long = (dist_list[i][1]>=5)
+                    ##check for spade fit
+                    for player,dist in enumerate(dist_list):
+                      if player !=i and s_long:
+                        if dist_list[player][0]==4:
+                          declarer = [hands_dealt[i],hcp_list[i],dist_list[i]]
+                          partner = [hands_dealt[player],hcp_list[player],dist_list[player]]
+                          print(declarer[1])
+                          break
+                    ##check for heart fit
+                    print(dist_list)
+                    for player,dist in enumerate(dist_list):
+                      if player !=i and h_long:
+                        if dist_list[player][1]==4:
+                          declarer = [hands_dealt[i],hcp_list[i],dist_list[i]]
+                          partner = [hands_dealt[player],hcp_list[player],dist_list[player]]
+                          print(declarer[1])
+                          break
+
+            hands_dealt,hcp_list,dist_list = deal()
+                              
+    return declarer,partner
+
+def M1Fs(): #one major, five support
+    hands_dealt,hcp_list,dist_list = deal()
+    #enum here is used to artificially map to the players
+    declarer = False
+    while not declarer:
+        for i,hcp in enumerate(hcp_list):
+            if 12<=hcp_list[i]<=21:
+                if dist_list[i][0] >= 5 or dist_list[i][1]>=5:
+                    s_long = (dist_list[i][0]>=5)
+                    h_long = (dist_list[i][1]>=5)
+                    ##check for spade fit
+                    for player,dist in enumerate(dist_list):
+                      if player !=i and s_long:
+                        if dist_list[player][0]>=5:
+                          declarer = [hands_dealt[i],hcp_list[i],dist_list[i]]
+                          partner = [hands_dealt[player],hcp_list[player],dist_list[player]]
+                          print(declarer[1])
+                          break
+                    ##check for heart fit
+                    print(dist_list)
+                    for player,dist in enumerate(dist_list):
+                      if player !=i and h_long:
+                        if dist_list[player][1]>=5:
+                          declarer = [hands_dealt[i],hcp_list[i],dist_list[i]]
+                          partner = [hands_dealt[player],hcp_list[player],dist_list[player]]
+                          print(declarer[1])
+                          break
+
+            hands_dealt,hcp_list,dist_list = deal()
+                              
+    return declarer,partner  
         
 def dh(hand): #display hand
     flat_h = []
@@ -194,6 +344,41 @@ async def dealcom(ctx, opener = "1NT"):
   elif opener == "1M":
     print("Generating 1M hand")
     d,p = M1()
+    dec = dh(d[0])
+    part = dh(p[0])
+    message=f"\nDeclarer Hand:\n||{dec}||\n\nPartner Hand:\n||{part}||"
+    await ctx.send(message)
+  elif opener == "1Mns":
+    print("Generating 1M hand (no support opposite)")
+    d,p = M1ns()
+    dec = dh(d[0])
+    part = dh(p[0])
+    message=f"\nDeclarer Hand:\n||{dec}||\n\nPartner Hand:\n||{part}||"
+    await ctx.send(message)
+  elif opener == "1M3s":
+    print("Generating 1M hand (three support opposite)")
+    d,p = M1ts()
+    dec = dh(d[0])
+    part = dh(p[0])
+    message=f"\nDeclarer Hand:\n||{dec}||\n\nPartner Hand:\n||{part}||"
+    await ctx.send(message)
+  elif opener == "1M4s":
+    print("Generating 1M hand (four support opposite)")
+    d,p = M1fs()
+    dec = dh(d[0])
+    part = dh(p[0])
+    message=f"\nDeclarer Hand:\n||{dec}||\n\nPartner Hand:\n||{part}||"
+    await ctx.send(message)
+  elif opener == "1M5s":
+    print("Generating 1M hand (five support opposite)")
+    d,p = M1Fs()
+    dec = dh(d[0])
+    part = dh(p[0])
+    message=f"\nDeclarer Hand:\n||{dec}||\n\nPartner Hand:\n||{part}||"
+    await ctx.send(message)
+  elif opener == "1m":
+    print("Generating 1m hand...")
+    d,p = m1()
     dec = dh(d[0])
     part = dh(p[0])
     message=f"\nDeclarer Hand:\n||{dec}||\n\nPartner Hand:\n||{part}||"
